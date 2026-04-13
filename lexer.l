@@ -1,14 +1,28 @@
+%{
+#include "y.tab.h"
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+%}
+
 %%
-print printf("Detected Print Statement %s\n",yytext);
-[+|*|/|-] printf("Detected operator Statement %s\n",yytext);
-= printf("Detected assignment Statement %s\n",yytext);
-[a-zA-Z]+ printf("Detected a variable %s\n",yytext);
+print {return PRINT;}
+[0-9]+ {
+    yylval=atoi(yytext);
+    return NUM;
+    }
+"+" {return '+';}
+"*" {return '*';}
+"/" {return '/';}
+"-" {return '-';}
+"=" {return '=';}
+"(" {return '(';}
+";" {return ';';}
+[a-zA-Z]+ { return VARIABLE;}
+[ \t\n] ;
+. {printf("Unknow character: %s\n",yytext);}
 %%
 int yywrap(){
 return 1;
 }
 
-int main(){
-yylex();
-return 0;
-}
