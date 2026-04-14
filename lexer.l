@@ -1,4 +1,5 @@
 %{
+#include "ast.h"
 #include "y.tab.h"
 #include <stdlib.h>
 #include <string.h>
@@ -7,10 +8,7 @@
 
 %%
 print {return PRINT;}
-[0-9]+ {
-    yylval=atoi(yytext);
-    return NUM;
-    }
+[0-9]+     { yylval.ival = atoi(yytext); return NUM; }
 "+" {return '+';}
 "*" {return '*';}
 "/" {return '/';}
@@ -18,7 +16,8 @@ print {return PRINT;}
 "=" {return '=';}
 "(" {return '(';}
 ";" {return ';';}
-[a-zA-Z]+ { return VARIABLE;}
+")" {return ')';}
+[a-zA-Z]+  { strncpy(yylval.sval, yytext, 63); return VARIABLE; }
 [ \t\n] ;
 . {printf("Unknow character: %s\n",yytext);}
 %%
