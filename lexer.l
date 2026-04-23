@@ -7,21 +7,19 @@
 %}
 
 %%
-print {return PRINT;}
+print      { return PRINT; }
+[0-9]+\.[0-9]* { yylval.fval = atof(yytext); return FNUM; }
 [0-9]+     { yylval.ival = atoi(yytext); return NUM; }
-"+" {return '+';}
-"*" {return '*';}
-"/" {return '/';}
-"-" {return '-';}
-"=" {return '=';}
-"(" {return '(';}
-";" {return ';';}
-")" {return ')';}
-[a-zA-Z]+  { strncpy(yylval.sval, yytext, 63); return VARIABLE; }
-[ \t\n] ;
-. {printf("Unknow character: %s\n",yytext);}
+"+"        { return '+'; }
+"*"        { return '*'; }
+"/"        { return '/'; }
+"-"        { return '-'; }
+"="        { return '='; }
+"("        { return '('; }
+";"        { return ';'; }
+")"        { return ')'; }
+[a-zA-Z][a-zA-Z0-9]* { strncpy(yylval.sval, yytext, 63); return VARIABLE; }
+[ \t\n]    ;
+.          { fprintf(stderr, "Error: unknown character '%s'\n", yytext); exit(1); }
 %%
-int yywrap(){
-return 1;
-}
-
+int yywrap() { return 1; }
